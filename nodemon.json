@@ -1,0 +1,6 @@
+{
+  "execMap": {
+    "js": "sucrase-node"
+  },
+  "ignore": ["*.test.js", "**/fixtures/**", "*.mp3", "audioFiles/"]
+}
