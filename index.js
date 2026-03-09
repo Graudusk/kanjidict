@@ -4,7 +4,7 @@ import express from "express";
 import https from "https";
 import { v4 as uuidv4 } from "uuid";
 
-import fs, { read } from "fs";
+import fs from "fs";
 dotenv.config();
 
 const URL = "https://play.ht/api/v1";
@@ -24,7 +24,7 @@ const parseCharacter = (character, verbose = false) => {
   newCharacter.meaning = character?.reading_meaning?.rmgroup?.meaning?.filter(
     (meaning) => {
       return typeof meaning === "string";
-    }
+    },
   );
 
   newCharacter.reading = character?.reading_meaning?.rmgroup?.reading
@@ -64,7 +64,7 @@ app.use(
       "Authorization",
       "Access-Control-Allow-Headers",
     ],
-  })
+  }),
 );
 app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true);
@@ -109,7 +109,7 @@ app.get("/generateAudioFiles", async (req, res) => {
     console.log(localFile);
 
     if (localFile) {
-      console.log('Local file found, skipping download...');
+      console.log("Local file found, skipping download...");
       // return res.send(localFile);
       continue;
     }
@@ -121,7 +121,7 @@ app.get("/generateAudioFiles", async (req, res) => {
       const localAudioFile = await downloadFile(
         audioFile.audioUrl,
         literal,
-        text
+        text,
       );
 
       return res.send(localAudioFile);
@@ -145,7 +145,7 @@ app.post("/generateAudio", async (req, res) => {
     const localAudioFile = await downloadFile(
       audioFile.audioUrl,
       literal,
-      text
+      text,
     );
 
     return res.send(localAudioFile);
@@ -154,7 +154,7 @@ app.post("/generateAudio", async (req, res) => {
 });
 
 const generateAudio = async (text) => {
-  console.log('Creating audio file for ${}')
+  console.log("Creating audio file for ${}");
   const data = {
     content: [text],
     voice: "Mizuki",
@@ -186,13 +186,12 @@ const saveFile = (text, filePath) => {
 
   fs.writeFileSync(
     "audioFiles/directory.json",
-    JSON.stringify(parsedData, null, 2)
+    JSON.stringify(parsedData, null, 2),
   );
 };
 
 const downloadFile = (url, text) => {
   console.log("Download started");
-  console.log({ filePath });
 
   return new Promise((resolve, reject) => {
     const filePath = uuidv4() + "_.mp3";
@@ -235,7 +234,7 @@ const pollForAudioFile = (transcriptionId) => {
               accept: "text/event-stream",
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const jsonData = await response.json();
 
@@ -268,7 +267,7 @@ app.get("/fourRandomCharacters", async (req, res) => {
   const characters = shuffle(
     json.kanjidic2.character.filter((character) => {
       return ALLOWED_GRADES.includes(character.misc.grade);
-    })
+    }),
   );
 
   for (let i = 0; i < 4; i++) {
